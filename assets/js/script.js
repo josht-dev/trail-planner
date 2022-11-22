@@ -27,8 +27,7 @@ const globalFunc = {
 */
 const searchHistoryObj = (localStorage['trailPlanner']) ? globalFunc.loadLocal() : {};
 
-
-
-
+/* REMOVE LATER - Left for testing purposes of the localStorage code
 //searchHistoryObj['id2'] = {name: 'test2 name'};
 console.log(searchHistoryObj);
+*/
