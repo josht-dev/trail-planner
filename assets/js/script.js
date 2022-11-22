@@ -1,3 +1,15 @@
+// *****Global Function Object*****
+const globalFunc = {
+    // Save user search history to localStorage function
+    loadLocal: function() {
+        return JSON.parse(localStorage.getItem('trailPlanner'));
+    },
+    // Retrieve user search history from localStorage function
+    saveLocal: function() {
+        localStorage.setItem('trailPlanner', JSON.stringify(searchHistoryObj));
+    }
+}
+
 // *****Global Variables*****
 /* An example of the data stored in the searchHistoryObj
 {
@@ -13,14 +25,10 @@
     }
 }
 */
-const searchHistoryObj = (localStorage['trailPlanner']) ? loadLocal() : {};
+const searchHistoryObj = (localStorage['trailPlanner']) ? globalFunc.loadLocal() : {};
 
 
-// TO DO - Save user search history to localStorage
-const saveLocal = () => {
-    localStorage.setItem('trailPlanner', JSON.stringify(searchHistoryObj));
-}
-// TO DO - Retrieve user search history from localStorage
-const loadLocal = () => {
-    return JSON.parse(localStorage.getItem('trailPlanner'));
-}
+
+
+//searchHistoryObj['id2'] = {name: 'test2 name'};
+console.log(searchHistoryObj);
