@@ -14,18 +14,24 @@ const globalFunc = {
 
         // Fetch lat/lon data from geoapify API
         fetch(geocodingUrl, {method: 'GET'})
-            .then(response => {
-                console.log(response);
-                return response.json();})
+            .then(response => {return response.json();})
             .then(data => {
+                // Function to trim extra decimals from lat/lon
+                const trimDecimals = num => {
+                    let dotIndex = num.toString().indexOf('.');
+                    let trimmedNum = num.toString().slice(0, dotIndex + 5);
+                    return Number(trimmedNum);
+                };
                 // Get the results obj from the array
                 let resultObj = data.results[0];
+                let lat = trimDecimals(resultObj.lat);
+                let lon = trimDecimals(resultObj.lon);
 
                 // Save data to serachHistoryObj
                 searchHistoryObj[data.results[0].place_id] = {
                     name: data.query.text,
-                    lat: resultObj.lat,
-                    lon: resultObj.lon,
+                    lat: lat,
+                    lon: lon,
                     bbox: resultObj.bbox
                 };
 
@@ -64,9 +70,7 @@ console.log(searchHistoryObj);
 // REMOVE LATER - Testing geocoding api
 //globalFunc.getLocation('carpenter peak trail colorado');
 //globalFunc.getLocation('513 americana rd, co');
-
-
-
+//console.log(searchHistoryObj);
 
 
 // TO DO - Validate address information better
