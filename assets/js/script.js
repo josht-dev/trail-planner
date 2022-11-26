@@ -10,7 +10,7 @@ const globalFunc = {
     },
     // Use the location address or name as a parameter when calling getLocation()
     getLocation: function(loc) {
-        let geocodingUrl = `https://api.geoapify.com/v1/geocode/search?name=${loc}&format=json&apiKey=${geoapifyApiKey}`;
+        let geocodingUrl = `https://api.geoapify.com/v1/geocode/search?text=${loc}&format=json&apiKey=${geoapifyApiKey}`;
 
         // Fetch lat/lon data from geoapify API
         fetch(geocodingUrl, {method: 'GET'})
@@ -18,9 +18,19 @@ const globalFunc = {
                 console.log(response);
                 return response.json();})
             .then(data => {
+                // Get the results obj from the array
+                let resultObj = data.results[0];
 
-                console.log(data);
+                // Save data to serachHistoryObj
+                searchHistoryObj[data.results[0].place_id] = {
+                    name: data.query.text,
+                    lat: resultObj.lat,
+                    lon: resultObj.lon,
+                    bbox: resultObj.bbox
+                };
 
+                // Save the new data to localStorage
+                this.saveLocal();
             })
         //
     }
@@ -33,12 +43,14 @@ const geoapifyApiKey = '035e16b84ace4340b1c953b2f690fc7e';
     id: {
         name: 'location name/address?'
         lat: 0,
-        lon: 0
+        lon: 0,
+        bbox: {}
     },
     id: {
         name: 'location name/address?'
         lat: 0,
-        lon: 0
+        lon: 0,
+        bbox:{}
     }
 }
 */
@@ -50,8 +62,13 @@ console.log(searchHistoryObj);
 */
 
 // REMOVE LATER - Testing geocoding api
-globalFunc.getLocation('carpenter peak trail colorado');
+//globalFunc.getLocation('carpenter peak trail colorado');
+//globalFunc.getLocation('513 americana rd, co');
 
 
+
+
+
+// TO DO - Validate address information better
 // TO DO - Set up autocomplete from geoapify address autocomplete API
 // TO DO - Use bbox get location map from openstreetmaps API
