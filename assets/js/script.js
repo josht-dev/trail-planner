@@ -44,9 +44,11 @@ const globalFunc = {
     },
     /* Use the latitude/longitude to get the NWS (National Weather Service) grid points
     id is the location key saved in the localStorage obj */
-    getNWSPoints: function(lat, lon, id = 0) {
+    getNWSPoints: function(lat, lon, id = 0, htmlId) {
         const locUrl = `https://api.weather.gov/points/${lat},${lon}`;
         
+        //console.log('test nwpoints function');
+        //console.log(locUrl);
         // Get the location grid url the api uses for weather
         fetch(locUrl, {method: 'GET', headers: headers})
             .then(response => {return response.json();})
@@ -60,14 +62,15 @@ const globalFunc = {
                     // Get the location weather
                     this.getWeather(data.properties.forecast, id);
                 } else {
-                    return data.properties.forecast;
+                    //console.log('else success');
+                    this.getWeather(data.properties.forecast, 0, htmlId);
                 }
             })
         //
     },
     /* Use NWS weather forecasts url for the location's grid points
     id is the location key saved in the localStorage obj */
-    getWeather: function(url, id = 0) {
+    getWeather: function(url, id = 0, htmlId) {
         // Get the weather forecast for the location
         fetch(url, {method: 'GET', headers: headers})
             .then(response => {return response.json();})
@@ -77,13 +80,38 @@ const globalFunc = {
                 if (id) {
                     // Save weather data
                     searchHistoryObj.id.rawWeatherData = data.properties.periods;
-                    return;
+
+                    // TO DO - Update html weather dashboard
+                    //this.updateWeatherHtml('weather-dashboard', id);
+                    
                 } else {
-                    return data.properties.periods[0];
-                }
-                
+                    this.updateWeatherHtml(htmlId, 0, data.properties.periods[0])
+                }  
             })
         //  
+    },
+    // Pass the html section container, an id if this is from searchHistoryObj, and the weather data to add
+    updateWeatherHtml: function(htmlId, id = 0, weatherData) {
+        //console.log(weatherData);
+        // Check if this is updated the weather dashboard or dev picks
+        if (htmlId === 'weather-dashboard') {
+
+            // TO DO - Update the html weather dashboard
+
+        } else {
+            const pickContainer = document.getElementById(htmlId);
+            const tempContainer = pickContainer.getElementsByClassName("temp");
+            const windContainer = pickContainer.getElementsByClassName("wind");
+            const iconContainer = pickContainer.getElementsByClassName("icon");
+            // Set the text that comes in with wind speed to uppercase
+            let windSpeed = weatherData.windSpeed;
+            windSpeed = windSpeed.toUpperCase();
+
+            // Add the html content
+            tempContainer[0].children[0].textContent = `${weatherData.temperature} ${weatherData.temperatureUnit}`;
+            windContainer[0].children[0].textContent = windSpeed;
+            iconContainer[0].children[0].setAttribute("src", weatherData.icon);
+        }
     }
 }
 
@@ -93,6 +121,7 @@ const globalFunc = {
 const youtubeSearchApi = 'https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q='
 const youtubeApiKey = 'AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ'
 // TODO: add search button to submit search criteria
+/*
 let ytSearchBtn = document.getElementById("")
 
 ytSearchBtn.addEventListener('click', function() {
@@ -110,7 +139,7 @@ ytSearchBtn.addEventListener('click', function() {
         const iFrame = document.getElementById("videoPlayer").setAttribute('src','https://www.youtube.com/embed/' + videoId)
     })
 })
-
+*/
 
 // *****Global Variables*****
 const geoapifyApiKey = '035e16b84ace4340b1c953b2f690fc7e';
@@ -149,27 +178,18 @@ const headers = new Headers({
 // Get current weather for dev picks for hiking location
 const devPicksObj = {
     // Location lat/lon for dev pick locations
-    'dev-josh-pick': {lat: 39.4289, lon:  -105.0682}
+    'dev-josh-pick': {lat: 39.4289, lon: -105.0682}
 }
 
 // Loop through the devPicksObj to set the current weather for each location
 for (let key in devPicksObj) {
     // Get the html elements
-    const weatherUrl = globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon);
-    const weatherData = globalFunc.getWeather(weatherUrl);
-    const pickContainer = document.getElementById(key);
-    const tempContainer = pickContainer.getElementsByClassName("temp");
-    const windContainer = pickContainer.getElementsByClassName("wind");
-    const iconContainer = pickContainer.getElementsByClassName("icon");
-    // Set the text that comes in with wind speed to uppercase
-    let windSpeed = weatherData.windSpeed;
-    windSpeed = windSpeed.toUpperCase();
-
-    // Add the html content
-    tempContainer.children[0].textContent = `${weatherData.temperature} ${weatherData.temperatureUnit}`;
-    windContainer.children[0].textContent = windSpeed;
-    iconContainer.children[0].setAttribute("src", weatherData.icon);
+    //const weatherUrl = globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon);
+    //const weatherData = globalFunc.getWeather('https://api.weather.gov/gridpoints/BOU/58,47/forecast', 0, key);
+    globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon, 0, key);
 }
+
+
 
 /* REMOVE LATER - Left for testing purposes of the localStorage code
 //searchHistoryObj['id2'] = {name: 'test2 name'};
