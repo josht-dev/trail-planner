@@ -192,7 +192,8 @@ const headers = new Headers({
 // Hold the latitude/longitude for dev pick hike locations
 const devPicksObj = {
     // Location lat/lon for dev pick locations
-    'dev-josh-pick': { lat: 39.4289, lon: -105.0682 }
+    'dev-josh-pick': { lat: 39.4289, lon: -105.0682 },
+    'dev-dylan-pick': {lat: 38.5607, lon: -109.5764 }
 }
 // Location search input/button
 const btnLocSearch = document.getElementById("loc-search");
