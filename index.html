@@ -22,8 +22,14 @@
     <div class="container-fluid">
       <a class="navbar-brand">Trail Planner</a>
       <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <!-- Input removed to use goeapify api autocomplete code
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        -->
+        <!-- Autocomplete code was originally provided by the geoapify api tutorial at
+          https://www.geoapify.com/tutorial/address-input-for-address-validation-and-address-verification-forms-tutorial -->
+        <div class="autocomplete-container" id="autocomplete-container"></div>
+        <!-- END Autocomplete code -->
+        <button id="loc-search" class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </div>
   </nav>

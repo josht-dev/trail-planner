@@ -1,20 +1,20 @@
 // *****Global Function Object*****
 const globalFunc = {
     // Save user search history to localStorage function
-    loadLocal: function() {
+    loadLocal: function () {
         return JSON.parse(localStorage.getItem('trailPlanner'));
     },
     // Retrieve user search history from localStorage function
-    saveLocal: function() {
+    saveLocal: function () {
         localStorage.setItem('trailPlanner', JSON.stringify(searchHistoryObj));
     },
     // Use the location address or name as a parameter when calling getLocation()
-    getLocation: function(loc) {
+    getLocation: function (loc) {
         let geocodingUrl = `https://api.geoapify.com/v1/geocode/search?text=${loc}&format=json&apiKey=${geoapifyApiKey}`;
 
         // Fetch lat/lon data from geoapify API
-        fetch(geocodingUrl, {method: 'GET'})
-            .then(response => {return response.json();})
+        fetch(geocodingUrl, { method: 'GET' })
+            .then(response => { return response.json(); })
             .then(data => {
                 // Function to trim extra decimals from lat/lon
                 const trimDecimals = num => {
@@ -37,23 +37,28 @@ const globalFunc = {
 
                 // Save the new data to localStorage
                 this.saveLocal();
+
+                // Proceed to get the weather from the nation weather service api
+                this.getNWSPoints(lat, lon, data.results[0].place_id, 'weather-dashbord');
             })
         //
     },
     /* Use the latitude/longitude to get the NWS (National Weather Service) grid points
     id is the location key saved in the localStorage obj */
-    getNWSPoints: function(lat, lon, id = 0, htmlId) {
+    getNWSPoints: function (lat, lon, id = 0, htmlId) {
         const locUrl = `https://api.weather.gov/points/${lat},${lon}`;
 
         // Get the location grid url the api uses for weather
-        fetch(locUrl, {method: 'GET', headers: headers})
-            .then(response => {return response.json();})
+        fetch(locUrl, { method: 'GET', headers: headers })
+            .then(response => { return response.json(); })
             .then(data => {
                 // If id = 0, don't save data
                 if (id) {
                     // Save location data
-                    searchHistoryObj.id.forecastUrl = data.properties.forecast;
-                    searchHistoryObj.id.forecastHourlyUrl = data.properties.forecastHourly;
+                    searchHistoryObj[id].forecastUrl = data.properties.forecast;
+                    searchHistoryObj[id].forecastHourlyUrl = data.properties.forecastHourly;
+                    // Save the new data to localStorage
+                    this.saveLocal();
                     // Get the location weather
                     this.getWeather(data.properties.forecast, id);
                 } else {
@@ -64,27 +69,50 @@ const globalFunc = {
     },
     /* Use NWS weather forecasts url for the location's grid points
     id is the location key saved in the localStorage obj */
-    getWeather: function(url, id = 0, htmlId) {
-        // Get the weather forecast for the location
-        fetch(url, {method: 'GET', headers: headers})
-            .then(response => {return response.json();})
-            .then(data => {
-                // If id = 0, don't save data
-                if (id) {
-                    // Save weather data
-                    searchHistoryObj.id.rawWeatherData = data.properties.periods;
+    getWeather: function (url, id = 0, htmlId) {
+        /* API has occasional response.status 500 codes, the accepted
+        procedure is to try again a few times*/
+        let retries = 0;
 
-                    // TO DO - Update html weather dashboard
-                    //this.updateWeatherHtml('weather-dashboard', id);
-                    
-                } else {
-                    this.updateWeatherHtml(htmlId, 0, data.properties.periods[0])
-                }  
-            })
-        //  
+        const fetchWeather = () => {
+            // Get the weather forecast for the location
+            fetch(url, { method: 'GET', headers: headers })
+                .then(response => {
+                    if (response.status == 500) {
+                        throw new Error(`Could not retrieve weather. Code: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // If id = 0, don't save data
+                    if (id) {
+                        // Save weather data
+                        searchHistoryObj[id].rawWeatherData = data.properties.periods;
+
+                        // Save the new data to localStorage
+                        this.saveLocal();
+
+                        // TO DO - Update html weather dashboard
+                        //this.updateWeatherHtml('weather-dashboard', id);
+
+                    } else {
+                        this.updateWeatherHtml(htmlId, 0, data.properties.periods[0])
+                    }
+                })
+                .catch((error) => {
+                    // TO DO - Add a loading modal?
+                    console.log(error);
+                    if (retries < 3) {
+                        retries++;
+                        fetchWeather();
+                    }
+                })
+            //          
+        }
+        fetchWeather();
     },
     // Pass the html section container, an id if this is from searchHistoryObj, and the weather data to add
-    updateWeatherHtml: function(htmlId, id = 0, weatherData) {
+    updateWeatherHtml: function (htmlId, id = 0, weatherData) {
         // Check if this is updated the weather dashboard or dev picks
         if (htmlId === 'weather-dashboard') {
 
@@ -166,17 +194,271 @@ const headers = new Headers({
 // Hold the latitude/longitude for dev pick hike locations
 const devPicksObj = {
     // Location lat/lon for dev pick locations
-    'dev-josh-pick': {lat: 39.4289, lon: -105.0682}
+    'dev-josh-pick': { lat: 39.4289, lon: -105.0682 }
 }
+// Location search input/button
+const btnLocSearch = document.getElementById("loc-search");
+btnLocSearch.addEventListener('click', function (event) {
+    event.preventDefault();
+    let searchVal = this.previousElementSibling.firstElementChild.firstElementChild.value;
+    
+    // Validate search input was not blank
+    if (searchVal) {
+        let saved = false;
+        let savedKey = 0;
+
+        // Check for previously saved search
+        for (let key in searchHistoryObj) {
+            let val = searchHistoryObj[key].name;
+            if (searchVal.toLowerCase() === val.toLowerCase()) {
+                saved = true;
+                savedKey = key;
+                break;
+            }
+        }
+        // If search was previously saved, skip geocoding
+        if (saved) {
+            globalFunc.getWeather(searchHistoryObj[savedKey].forecastUrl, savedKey, 'weather-dashboard');
+        } else {
+            // Use geocoding to get the lat/loc
+            globalFunc.getLocation(searchVal);
+        }
+    }
+})
+
+// *****Autocomplete Address Code*****
+/* Autocomplete code was originally provided by the geoapify api tutorial at
+    https://www.geoapify.com/tutorial/address-input-for-address-validation-and-address-verification-forms-tutorial*/
+function addressAutocomplete(containerElement, callback, options) {
+
+    const MIN_ADDRESS_LENGTH = 3;
+    const DEBOUNCE_DELAY = 300;
+
+    // create container for input element
+    const inputContainerElement = document.createElement("div");
+    inputContainerElement.setAttribute("class", "input-container");
+    containerElement.appendChild(inputContainerElement);
+
+    // create input element
+    const inputElement = document.createElement("input");
+    inputElement.setAttribute("type", "text");
+    inputElement.setAttribute("placeholder", options.placeholder);
+    // Add bootstrap classes to input from tutorial
+    inputElement.classList.add('form-control', 'me-2');
+    inputContainerElement.appendChild(inputElement);
+
+    // add input field clear button
+    const clearButton = document.createElement("div");
+    clearButton.classList.add("clear-button");
+    addIcon(clearButton);
+    clearButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        inputElement.value = '';
+        callback(null);
+        clearButton.classList.remove("visible");
+        closeDropDownList();
+    });
+    inputContainerElement.appendChild(clearButton);
+
+    /* We will call the API with a timeout to prevent unneccessary API activity.*/
+    let currentTimeout;
+
+    /* Save the current request promise reject function. To be able to cancel the promise when a new request comes */
+    let currentPromiseReject;
+
+    /* Focused item in the autocomplete list. This variable is used to navigate with buttons */
+    let focusedItemIndex;
+
+    /* Process a user input: */
+    inputElement.addEventListener("input", function (e) {
+        const currentValue = this.value;
+
+        /* Close any already open dropdown list */
+        closeDropDownList();
+
+
+        // Cancel previous timeout
+        if (currentTimeout) {
+            clearTimeout(currentTimeout);
+        }
+
+        // Cancel previous request promise
+        if (currentPromiseReject) {
+            currentPromiseReject({
+                canceled: true
+            });
+        }
+
+        if (!currentValue) {
+            clearButton.classList.remove("visible");
+        }
+
+        // Show clearButton when there is a text
+        clearButton.classList.add("visible");
+
+        // Skip empty or short address strings
+        if (!currentValue || currentValue.length < MIN_ADDRESS_LENGTH) {
+            return false;
+        }
+
+        /* Call the Address Autocomplete API with a delay */
+        currentTimeout = setTimeout(() => {
+            currentTimeout = null;
+
+            /* Create a new promise and send geocoding request */
+            const promise = new Promise((resolve, reject) => {
+                currentPromiseReject = reject;
+
+                var url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(currentValue)}&filter=countrycode:us&format=json&limit=5&apiKey=${geoapifyApiKey}`;
+
+                fetch(url)
+                    .then(response => {
+                        currentPromiseReject = null;
+
+                        // check if the call was successful
+                        if (response.ok) {
+                            response.json().then(data => resolve(data));
+                        } else {
+                            response.json().then(data => reject(data));
+                        }
+                    });
+            });
+
+            promise.then((data) => {
+                // here we get address suggestions
+                currentItems = data.results;
+
+                /*create a DIV element that will contain the items (values):*/
+                const autocompleteItemsElement = document.createElement("div");
+                autocompleteItemsElement.setAttribute("class", "autocomplete-items");
+                inputContainerElement.appendChild(autocompleteItemsElement);
+
+                /* For each item in the results */
+                data.results.forEach((result, index) => {
+                    /* Create a DIV element for each element: */
+                    const itemElement = document.createElement("div");
+                    /* Set formatted address as item value */
+                    itemElement.innerHTML = result.formatted;
+                    autocompleteItemsElement.appendChild(itemElement);
+
+                    /* Set the value for the autocomplete text field and notify: */
+                    itemElement.addEventListener("click", function (e) {
+                        inputElement.value = currentItems[index].formatted;
+                        callback(currentItems[index]);
+                        /* Close the list of autocompleted values: */
+                        closeDropDownList();
+                    });
+                });
+
+            }, (err) => {
+                if (!err.canceled) {
+                    console.log(err);
+                }
+            });
+        }, DEBOUNCE_DELAY);
+    });
+
+    /* Add support for keyboard navigation */
+    inputElement.addEventListener("keydown", function (e) {
+        var autocompleteItemsElement = containerElement.querySelector(".autocomplete-items");
+        if (autocompleteItemsElement) {
+            var itemElements = autocompleteItemsElement.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                e.preventDefault();
+                /*If the arrow DOWN key is pressed, increase the focusedItemIndex variable:*/
+                focusedItemIndex = focusedItemIndex !== itemElements.length - 1 ? focusedItemIndex + 1 : 0;
+                /*and and make the current item more visible:*/
+                setActive(itemElements, focusedItemIndex);
+            } else if (e.keyCode == 38) {
+                e.preventDefault();
+
+                /*If the arrow UP key is pressed, decrease the focusedItemIndex variable:*/
+                focusedItemIndex = focusedItemIndex !== 0 ? focusedItemIndex - 1 : focusedItemIndex = (itemElements.length - 1);
+                /*and and make the current item more visible:*/
+                setActive(itemElements, focusedItemIndex);
+            } else if (e.keyCode == 13) {
+                /* If the ENTER key is pressed and value as selected, close the list*/
+                e.preventDefault();
+                if (focusedItemIndex > -1) {
+                    closeDropDownList();
+                }
+            }
+        } else {
+            if (e.keyCode == 40) {
+                /* Open dropdown list again */
+                var event = document.createEvent('Event');
+                event.initEvent('input', true, true);
+                inputElement.dispatchEvent(event);
+            }
+        }
+    });
+
+    function setActive(items, index) {
+        if (!items || !items.length) return false;
+
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove("autocomplete-active");
+        }
+
+        /* Add class "autocomplete-active" to the active element*/
+        items[index].classList.add("autocomplete-active");
+
+        // Change input value and notify
+        inputElement.value = currentItems[index].formatted;
+        callback(currentItems[index]);
+    }
+
+    function closeDropDownList() {
+        const autocompleteItemsElement = inputContainerElement.querySelector(".autocomplete-items");
+        if (autocompleteItemsElement) {
+            inputContainerElement.removeChild(autocompleteItemsElement);
+        }
+
+        focusedItemIndex = -1;
+    }
+
+    function addIcon(buttonElement) {
+        const svgElement = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+        svgElement.setAttribute('viewBox', "0 0 24 24");
+        svgElement.setAttribute('height', "24");
+
+        const iconElement = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+        iconElement.setAttribute("d", "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z");
+        iconElement.setAttribute('fill', 'currentColor');
+        svgElement.appendChild(iconElement);
+        buttonElement.appendChild(svgElement);
+    }
+
+    /* Close the autocomplete dropdown when the document is clicked. 
+      Skip, when a user clicks on the input field */
+    document.addEventListener("click", function (e) {
+        if (e.target !== inputElement) {
+            closeDropDownList();
+        } else if (!containerElement.querySelector(".autocomplete-items")) {
+            // open dropdown list again
+            var event = document.createEvent('Event');
+            event.initEvent('input', true, true);
+            inputElement.dispatchEvent(event);
+        }
+    });
+}
+
+addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
+    /* Commented out tutorial code, left for future debugging
+    console.log("Selected option: ");
+    console.log(data);
+    */
+}, {
+    placeholder: "Enter an address here"
+});
+// *****END Autocomplete Address Code*****
 
 
 // *****Run Code Below at Load*****
 
 // Loop through the devPicksObj to set the current weather for each location
 for (let key in devPicksObj) {
-    // Get the html elements
-    //const weatherUrl = globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon);
-    //const weatherData = globalFunc.getWeather('https://api.weather.gov/gridpoints/BOU/58,47/forecast', 0, key);
+    // Get the location weather and add to html
     globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon, 0, key);
 }
 
