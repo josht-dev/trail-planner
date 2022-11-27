@@ -112,26 +112,24 @@ const globalFunc = {
 
 const youtubeSearchApi = 'https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q='
 const youtubeApiKey = 'AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ'
-// TODO: add search button to submit search criteria
-/*
-let ytSearchBtn = document.getElementById("")
+
+const ytSearchBtn = document.getElementById("ytSearchBtn")
 
 ytSearchBtn.addEventListener('click', function() {
-    // TODO: add input box to enter search criteria
-    let searchCriteria = document.getElementById("searchCriteria").value
-    console.log(searchCriteria)
+    const searchCriteria = document.getElementById("searchCriteria").value
+// makes youtube search based on input from user in searchCriteria box / TODO: Set up sort of category filter to outdoors
     fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q=' + searchCriteria)
     .then(function (response){
         return response.json();
-    }).then(function(data){
-        console.log(data)
-        let videoId = data.items[0].id.videoId
+    }).then(function(YTdata){
+        console.log(YTdata)
+        // TODO: randomize video played out of first 5(?) results?
+        let videoId = YTdata.items[0].id.videoId
         console.log(videoId)
-        // TODO: create Iframe element in html to hold found hike video
+        // using yt search data, sets videoID to be played in youtube Player container
         const iFrame = document.getElementById("videoPlayer").setAttribute('src','https://www.youtube.com/embed/' + videoId)
     })
 })
-*/
 
 // *****Global Variables*****
 const geoapifyApiKey = '035e16b84ace4340b1c953b2f690fc7e';
@@ -182,7 +180,7 @@ for (let key in devPicksObj) {
 
 
 // TO DO - Validate address information better
-// TO DO - Look into google advert/tracking 'bocked by client' console errors
+// TO DO - Look into google advert/tracking 'blocked by client' console errors
 // TO DO - Check the response header for if the points address expired
 // TO DO - Add ability to view the hourly forecast from National Weather Service
 // TO DO - Set up autocomplete from geoapify address autocomplete API
