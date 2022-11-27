@@ -1,161 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./assets/css/style.css">
-    <!-- CSS only -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-<!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    <title>Trail Planner</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+  <title>Trail Planner</title>
 </head>
+
 <body>
   <!-- Nav and trail search container -->
-    <nav class="navbar bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand">Trail Planner</a>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
-      </nav>
-      <!-- Weather Dashboard container -->
+  <nav class="navbar bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand">Trail Planner</a>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  <!-- Weather Dashboard container -->
   <div class="container">
     <section id="header" class="row">
-        <div class="card col" >
-            <div class="card-body">
-              <h5 class="card-title">Weather Dashboard</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>  
-            </div>
-          </div>
-
-          <div class="card col" >
-            <div class="card-body">
-              <h5 class="card-title">Weather Card</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>  
-            </div>
-          </div>
-
-          <div class="card col" >
-            <div class="card-body">
-              <h5 class="card-title">Weather Card</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>  
-            </div>
-          </div>
-        </section>
+      <div class="card col">
+        <div class="card-body">
+          <h5 class="card-title">Weather Dashboard</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+        </div>
       </div>
 
-    <main id="body">
-      <div class="row">
-        <!-- YouTube Player container -->
-        <div class="col-sm-6">
-          <div class="card" style="height: 600px">
-            <div class="card-body">
-              <h5 class="card-title">YouTube Player</h5>
-            </div>
+      <div class="card col">
+        <div class="card-body">
+          <h5 class="card-title">Weather Card</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+        </div>
+      </div>
+
+      <div class="card col">
+        <div class="card-body">
+          <h5 class="card-title">Weather Card</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <main id="body">
+    <div class="row">
+      <!-- YouTube Player container -->
+      <div class="col-sm-6">
+        <div class="card" style="height: 600px">
+          <div class="card-body">
+            <h5 class="card-title">YouTube Player</h5>
           </div>
         </div>
-        <!-- Dev Hiking Pick container -->
-        <section class="col-sm-6">
+      </div>
+      <!-- Dev Hiking Pick container -->
+      <section class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <section class="devname" style="height: 600px">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Dev Name</h5>
+                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Hike Address</h5>
+                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Weather Card</h5>
+                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Hike Video</h5>
+                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </section>
+      <div class="row">
+        <!-- Packing Essentials container -->
+        <div class="col-sm-6">
           <div class="card">
             <div class="card-body">
-              <section class="devname" style="height: 600px">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title">Dev Name</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title">Hike Address</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title">Weather Card</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title">Hike Video</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              
+              <h5 class="card-title">Packing Essentials</h5>
+              <p class="card-text"> &#x2022; Of course, a small to medium size backpack to pack the following essentials
+              </p>
+              <p>&#x2022; First Aid Kit: In the event of any injury, a first aid kit will help you clean the wound and
+                wrap/cover it up. </p>
+              <p>&#x2022; Hiking appropriate clothing: The proper shoes will make any outdoor activity more comfortable,
+                as well as the proper outerwear depending on where your destination is. </p>
+              <p>&#x2022; Plenty of food and water: Water is always important, and it's nice to have a decent snack
+                packed with you. </p>
+
+              <p>&#x2022; For more remote hikes;
+              <ul>
+
+                <li>Navigation tools: If you’re going on a far out, remote hike, navigation tools will help in the event
+                  you get lost or are astray of the trail. </li>
+                <li>Knife or multi-tool: a multitool such as a leatherman or similar holds several different tools that
+                  may help you fare the wilderness should you get lost</li>
+                <li>Some form of fire starter: Once more, if you get lost a fire will be your best friend for many
+                  reasons; a source of heat. A way to prepare food and water. As well as the produced smoke being a
+                  possible method of rescue services locating you. Flint, matches or a lighter as well as some cotton
+                  balls, tissue or cloth will be light to pack. </li>
+              </ul>
+              </p>
             </div>
           </div>
-        </section>
-        <div class="row">
-          <!-- Packing Essentials container -->
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Packing Essentials</h5>
-                <p class="card-text"> &#x2022; Of course, a small to medium size backpack to pack the following essentials</p>
-                  <p>&#x2022; First Aid Kit: In the event of any injury, a first aid kit will help you clean the wound and wrap/cover it up. </p>
-                  <p>&#x2022; Hiking appropriate clothing: The proper shoes will make any outdoor activity more comfortable, as well as the proper outerwear depending on where your destination is. </p>
-                  <p>&#x2022; Plenty of food and water: Water is always important, and it's nice to have a decent snack packed with you. </p>
-
-                  <p>&#x2022; For more remote hikes;
-                    <ul>
-
-                      <li>Navigation tools: If you’re going on a far out, remote hike, navigation tools will help in the event you get lost or are astray of the trail. </li>
-                      <li>Knife or multi-tool: a multitool such as a leatherman or similar holds several different tools that may help you fare the wilderness should you get lost</li>
-                      <li>Some form of fire starter: Once more, if you get lost a fire will be your best friend for many reasons; a source of heat. A way to prepare food and water. As well as the produced smoke being a possible method of rescue services locating you. Flint, matches or a lighter as well as some cotton balls, tissue or cloth will be light to pack. </li>
-                    </ul>
-                  </p>
-              </div>
-            </div>
-          </div>
-          <!-- Hiking Guidlines container -->
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Hiking guidlines</h5>
-                <p class="card-text"> &#x2022; Know the right of way: Check for signage stating the right of way, as it can vary trail to trail. 
-                  <p>&#x2022; Though these are some basic guidelines
-                    <ul>
-                      <li> Hikers going uphill have the right of way</li>
-                      <li> Hikers yield to horses and other pack stock: Stop and step to the side. *Announce your presence if approaching from behind</li>
-                      <li> Bicyclists yield to hikers, horses and other pack stock: come to a full stop and step aside. *Announce your presence if approaching from behind</li>
-                    </ul>
-                  </p>
-                 <p> &#x2022;Stay on the trail: Trails lie within beautiful scenes of nature; respect that nature so that many others will be able to as well for years to come</li>
-                 <p>&#x2022; Be kind to other hikers: Offer a kind greeting of some kind to others on the trail. We are all in a beautiful location; enjoy it together.</p>
-                 <p> &#x2022; Do not disturb the wildlife:  Some parks require you to maintain a certain between you and the animals. Interacting or trying to interact with wild animals can put not only you in danger, but also the animals. (https://www.nps.gov/subjects/watchingwildlife/7ways.htm)</p>
-                 <p>&#x2022; Be mindful of trail conditions(Using this webpage!): Hiking along a muddy trail can not only be rough and hazardous, but can ultimately damage the trail and environment</p>
-                 <p>&#x2022; Be aware of the surroundings: Keep your eyes and ears open for wildlife, both docile and dangerous. Get an idea of what wildlife may be in the area of your trail, and know what to do in the case of a dangerous encounter(https://www.nps.gov/articles/hiking-in-bear-country.htm)</p>
-                  </p>
-              </div>
+        </div>
+        <!-- Hiking Guidlines container -->
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Hiking guidlines</h5>
+              <p class="card-text"> &#x2022; Know the right of way: Check for signage stating the right of way, as it
+                can vary trail to trail.
+              <p>&#x2022; Though these are some basic guidelines
+              <ul>
+                <li> Hikers going uphill have the right of way</li>
+                <li> Hikers yield to horses and other pack stock: Stop and step to the side. *Announce your presence if
+                  approaching from behind</li>
+                <li> Bicyclists yield to hikers, horses and other pack stock: come to a full stop and step aside.
+                  *Announce your presence if approaching from behind</li>
+              </ul>
+              </p>
+              <p> &#x2022;Stay on the trail: Trails lie within beautiful scenes of nature; respect that nature so that
+                many others will be able to as well for years to come</li>
+              <p>&#x2022; Be kind to other hikers: Offer a kind greeting of some kind to others on the trail. We are all
+                in a beautiful location; enjoy it together.</p>
+              <p> &#x2022; Do not disturb the wildlife: Some parks require you to maintain a certain between you and the
+                animals. Interacting or trying to interact with wild animals can put not only you in danger, but also
+                the animals. (https://www.nps.gov/subjects/watchingwildlife/7ways.htm)</p>
+              <p>&#x2022; Be mindful of trail conditions(Using this webpage!): Hiking along a muddy trail can not only
+                be rough and hazardous, but can ultimately damage the trail and environment</p>
+              <p>&#x2022; Be aware of the surroundings: Keep your eyes and ears open for wildlife, both docile and
+                dangerous. Get an idea of what wildlife may be in the area of your trail, and know what to do in the
+                case of a dangerous encounter(https://www.nps.gov/articles/hiking-in-bear-country.htm)</p>
+              </p>
             </div>
           </div>
         </div>
       </div>
-    </main>  
+    </div>
+  </main>
 
-    <script src="./assets/js/script.js"></script>
+  <script src="./assets/js/script.js"></script>
 </body>
+
 </html>
