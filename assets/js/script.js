@@ -124,7 +124,7 @@ ytSearchBtn.addEventListener('click', function() {
     }).then(function(YTdata){
         console.log(YTdata)
         // TODO: randomize video played out of first 5(?) results?
-        let videoId = YTdata.items[0].id.videoId
+        let videoId = YTdata.items[Math.floor(Math.random() * 5)].id.videoId
         console.log(videoId)
         // using yt search data, sets videoID to be played in youtube Player container
         const iFrame = document.getElementById("videoPlayer").setAttribute('src','https://www.youtube.com/embed/' + videoId)
