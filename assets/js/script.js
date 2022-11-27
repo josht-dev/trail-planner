@@ -37,6 +37,9 @@ const globalFunc = {
 
                 // Save the new data to localStorage
                 this.saveLocal();
+
+                // Proceed to get the weather from the nation weather service api
+                this.getNWSPoints(lat, lon, data.results[0].place_id, 'weather-dashbord');
             })
         //
     },
@@ -52,8 +55,10 @@ const globalFunc = {
                 // If id = 0, don't save data
                 if (id) {
                     // Save location data
-                    searchHistoryObj.id.forecastUrl = data.properties.forecast;
-                    searchHistoryObj.id.forecastHourlyUrl = data.properties.forecastHourly;
+                    searchHistoryObj[id].forecastUrl = data.properties.forecast;
+                    searchHistoryObj[id].forecastHourlyUrl = data.properties.forecastHourly;
+                    // Save the new data to localStorage
+                    this.saveLocal();
                     // Get the location weather
                     this.getWeather(data.properties.forecast, id);
                 } else {
@@ -65,23 +70,46 @@ const globalFunc = {
     /* Use NWS weather forecasts url for the location's grid points
     id is the location key saved in the localStorage obj */
     getWeather: function(url, id = 0, htmlId) {
-        // Get the weather forecast for the location
-        fetch(url, {method: 'GET', headers: headers})
-            .then(response => {return response.json();})
-            .then(data => {
-                // If id = 0, don't save data
-                if (id) {
-                    // Save weather data
-                    searchHistoryObj.id.rawWeatherData = data.properties.periods;
+        /* API has occasional response.status 500 codes, the accepted
+        procedure is to try again a few times*/
+        let retries = 0;
 
-                    // TO DO - Update html weather dashboard
-                    //this.updateWeatherHtml('weather-dashboard', id);
-                    
-                } else {
-                    this.updateWeatherHtml(htmlId, 0, data.properties.periods[0])
-                }  
-            })
-        //  
+        const fetchWeather = () => {
+            // Get the weather forecast for the location
+            fetch(url, {method: 'GET', headers: headers})
+                .then(response => {
+                    if (response.status == 500) {
+                        throw new Error (`Could not retrieve weather. Code: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // If id = 0, don't save data
+                    if (id) {
+                        // Save weather data
+                        searchHistoryObj[id].rawWeatherData = data.properties.periods;
+
+                        // Save the new data to localStorage
+                        this.saveLocal();
+
+                        // TO DO - Update html weather dashboard
+                        //this.updateWeatherHtml('weather-dashboard', id);
+                        
+                    } else {
+                        this.updateWeatherHtml(htmlId, 0, data.properties.periods[0])
+                    }  
+                })
+                .catch((error) => {
+                    // TO DO - Add a loading modal?
+                    console.log(error);
+                    if (retries < 3) {
+                        retries++;
+                        fetchWeather();
+                    }
+                })
+            //          
+        }
+        fetchWeather();        
     },
     // Pass the html section container, an id if this is from searchHistoryObj, and the weather data to add
     updateWeatherHtml: function(htmlId, id = 0, weatherData) {
@@ -168,15 +196,41 @@ const devPicksObj = {
     // Location lat/lon for dev pick locations
     'dev-josh-pick': {lat: 39.4289, lon: -105.0682}
 }
+// Location search input/button
+const btnLocSearch = document.getElementById("loc-search");
+btnLocSearch.addEventListener('click', function(event) {
+    event.preventDefault();
+    let searchVal = this.previousElementSibling.value;
 
+    // Validate search input was not blank
+    if (searchVal) {
+        let saved = false;
+        let savedKey = 0;
+
+        // Check for previously saved search
+        for (let key in searchHistoryObj) {
+            let val = searchHistoryObj[key].name;
+            if (searchVal.toLowerCase() === val.toLowerCase()) {
+                saved = true;
+                savedKey = key;
+                break;
+            }
+        }
+        // If search was previously saved, skip geocoding
+        if (saved) {
+            globalFunc.getWeather(searchHistoryObj[savedKey].forecastUrl, savedKey, 'weather-dashboard');
+        } else {
+            // Use geocoding to get the lat/loc
+            globalFunc.getLocation(searchVal);
+        }  
+    }
+})
 
 // *****Run Code Below at Load*****
 
 // Loop through the devPicksObj to set the current weather for each location
 for (let key in devPicksObj) {
-    // Get the html elements
-    //const weatherUrl = globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon);
-    //const weatherData = globalFunc.getWeather('https://api.weather.gov/gridpoints/BOU/58,47/forecast', 0, key);
+    // Get the location weather and add to html
     globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon, 0, key);
 }
 
