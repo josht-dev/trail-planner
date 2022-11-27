@@ -76,6 +76,31 @@ const globalFunc = {
     }
 }
 
+// ***** Youtube Search and video section *****
+// TODO: Investigate potential cookie issue: // some internal error occurs shortly after video begins playing https://issuetracker.google.com/issues/229013699
+
+const youtubeSearchApi = 'https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q='
+const youtubeApiKey = 'AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ'
+// TODO: add search button to submit search criteria
+let ytSearchBtn = document.getElementById("")
+
+ytSearchBtn.addEventListener('click', function() {
+    // TODO: add input box to enter search criteria
+    let searchCriteria = document.getElementById("searchCriteria").value
+    console.log(searchCriteria)
+    fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q=' + searchCriteria)
+    .then(function (response){
+        return response.json();
+    }).then(function(data){
+        console.log(data)
+        let videoId = data.items[0].id.videoId
+        console.log(videoId)
+        // TODO: create Iframe element in html to hold found hike video
+        const iFrame = document.getElementById("videoPlayer").setAttribute('src','https://www.youtube.com/embed/' + videoId)
+    })
+})
+
+
 // *****Global Variables*****
 const geoapifyApiKey = '035e16b84ace4340b1c953b2f690fc7e';
 /* An example of the data stored in the searchHistoryObj
