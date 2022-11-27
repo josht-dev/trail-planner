@@ -1,4 +1,12 @@
 * {
-    font-family: fantasy;
+    font-family: 'Times New Roman', Times, serif;
 }
 
+.card{
+    margin: 20px;
+
+}
+
+.card-title {
+    text-align: center;
+}
