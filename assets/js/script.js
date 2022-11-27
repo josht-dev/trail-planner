@@ -44,7 +44,7 @@ const globalFunc = {
     },
     /* Use the latitude/longitude to get the NWS (National Weather Service) grid points
     id is the location key saved in the localStorage obj */
-    getNWSPoints: function(lat, lon, id) {
+    getNWSPoints: function(lat, lon, id = 0) {
         const locUrl = `https://api.weather.gov/points/${lat},${lon}`;
         
         // Get the location grid url the api uses for weather
@@ -52,25 +52,36 @@ const globalFunc = {
             .then(response => {return response.json();})
             .then(data => {
                 //console.log(data);
-                // Save location data
-                searchHistoryObj.id.forecastUrl = data.properties.forecast;
-                searchHistoryObj.id.forecastHourlyUrl = data.properties.forecastHourly;
-                // Get the location weather
-                this.getWeather(data.properties.forecast, id);
+                // If id = 0, don't save data
+                if (id) {
+                    // Save location data
+                    searchHistoryObj.id.forecastUrl = data.properties.forecast;
+                    searchHistoryObj.id.forecastHourlyUrl = data.properties.forecastHourly;
+                    // Get the location weather
+                    this.getWeather(data.properties.forecast, id);
+                } else {
+                    return data.properties.forecast;
+                }
             })
         //
     },
     /* Use NWS weather forecasts url for the location's grid points
     id is the location key saved in the localStorage obj */
-    getWeather: function(url, id) {
+    getWeather: function(url, id = 0) {
         // Get the weather forecast for the location
         fetch(url, {method: 'GET', headers: headers})
             .then(response => {return response.json();})
             .then(data => {
                 //console.log(data);
-                // Save weather data
-                searchHistoryObj.id.rawWeatherData = data.properties.periods;
-                return;
+                // If id = 0, don't save data
+                if (id) {
+                    // Save weather data
+                    searchHistoryObj.id.rawWeatherData = data.properties.periods;
+                    return;
+                } else {
+                    return data.properties.periods[0];
+                }
+                
             })
         //  
     }
@@ -133,6 +144,32 @@ const headers = new Headers({
 });
 
 
+// *****Run Code Below at Load*****
+
+// Get current weather for dev picks for hiking location
+const devPicksObj = {
+    // Location lat/lon for dev pick locations
+    'dev-josh-pick': {lat: 39.4289, lon:  -105.0682}
+}
+
+// Loop through the devPicksObj to set the current weather for each location
+for (let key in devPicksObj) {
+    // Get the html elements
+    const weatherUrl = globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon);
+    const weatherData = globalFunc.getWeather(weatherUrl);
+    const pickContainer = document.getElementById(key);
+    const tempContainer = pickContainer.getElementsByClassName("temp");
+    const windContainer = pickContainer.getElementsByClassName("wind");
+    const iconContainer = pickContainer.getElementsByClassName("icon");
+    // Set the text that comes in with wind speed to uppercase
+    let windSpeed = weatherData.windSpeed;
+    windSpeed = windSpeed.toUpperCase();
+
+    // Add the html content
+    tempContainer.children[0].textContent = `${weatherData.temperature} ${weatherData.temperatureUnit}`;
+    windContainer.children[0].textContent = windSpeed;
+    iconContainer.children[0].setAttribute("src", weatherData.icon);
+}
 
 /* REMOVE LATER - Left for testing purposes of the localStorage code
 //searchHistoryObj['id2'] = {name: 'test2 name'};
