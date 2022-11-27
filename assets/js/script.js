@@ -16,18 +16,24 @@ const globalFunc = {
 
         // Fetch lat/lon data from geoapify API
         fetch(geocodingUrl, {method: 'GET'})
-            .then(response => {
-                console.log(response);
-                return response.json();})
+            .then(response => {return response.json();})
             .then(data => {
+                // Function to trim extra decimals from lat/lon
+                const trimDecimals = num => {
+                    let dotIndex = num.toString().indexOf('.');
+                    let trimmedNum = num.toString().slice(0, dotIndex + 5);
+                    return Number(trimmedNum);
+                };
                 // Get the results obj from the array
                 let resultObj = data.results[0];
+                let lat = trimDecimals(resultObj.lat);
+                let lon = trimDecimals(resultObj.lon);
 
                 // Save data to serachHistoryObj
                 searchHistoryObj[data.results[0].place_id] = {
                     name: data.query.text,
-                    lat: resultObj.lat,
-                    lon: resultObj.lon,
+                    lat: lat,
+                    lon: lon,
                     bbox: resultObj.bbox
                 };
 
@@ -45,7 +51,7 @@ const globalFunc = {
         fetch(locUrl, {method: 'GET', headers: headers})
             .then(response => {return response.json();})
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 // Save location data
                 searchHistoryObj.id.forecastUrl = data.properties.forecast;
                 searchHistoryObj.id.forecastHourlyUrl = data.properties.forecastHourly;
@@ -61,7 +67,7 @@ const globalFunc = {
         fetch(url, {method: 'GET', headers: headers})
             .then(response => {return response.json();})
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 // Save weather data
                 searchHistoryObj.id.rawWeatherData = data.properties.periods;
                 return;
@@ -112,8 +118,10 @@ console.log(searchHistoryObj);
 //globalFunc.getLocation('carpenter peak trail colorado');
 //globalFunc.getLocation('513 americana rd, co');  
 
+// REMOVE LATER - Testing for national weather service api
 //globalFunc.getNWSPoints(38.8894, -77.0352);
 //globalFunc.getWeather('https://api.weather.gov/gridpoints/TOP/31,80/forecast');
+
 
 // TO DO - Validate address information better
 // TO DO - Check the response header for if the points address expired
