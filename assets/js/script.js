@@ -9,8 +9,6 @@ const globalFunc = {
         localStorage.setItem('trailPlanner', JSON.stringify(searchHistoryObj));
     },
     // Use the location address or name as a parameter when calling getLocation()
-    /* TO DO - fix geocoding lat/lan to only return the last 4 decimals,
-        this is saved for later use if the weather url expires*/
     getLocation: function(loc) {
         let geocodingUrl = `https://api.geoapify.com/v1/geocode/search?text=${loc}&format=json&apiKey=${geoapifyApiKey}`;
 
@@ -44,35 +42,68 @@ const globalFunc = {
     },
     /* Use the latitude/longitude to get the NWS (National Weather Service) grid points
     id is the location key saved in the localStorage obj */
-    getNWSPoints: function(lat, lon, id) {
+    getNWSPoints: function(lat, lon, id = 0, htmlId) {
         const locUrl = `https://api.weather.gov/points/${lat},${lon}`;
-        
+
         // Get the location grid url the api uses for weather
         fetch(locUrl, {method: 'GET', headers: headers})
             .then(response => {return response.json();})
             .then(data => {
-                //console.log(data);
-                // Save location data
-                searchHistoryObj.id.forecastUrl = data.properties.forecast;
-                searchHistoryObj.id.forecastHourlyUrl = data.properties.forecastHourly;
-                // Get the location weather
-                this.getWeather(data.properties.forecast, id);
+                // If id = 0, don't save data
+                if (id) {
+                    // Save location data
+                    searchHistoryObj.id.forecastUrl = data.properties.forecast;
+                    searchHistoryObj.id.forecastHourlyUrl = data.properties.forecastHourly;
+                    // Get the location weather
+                    this.getWeather(data.properties.forecast, id);
+                } else {
+                    this.getWeather(data.properties.forecast, 0, htmlId);
+                }
             })
         //
     },
     /* Use NWS weather forecasts url for the location's grid points
     id is the location key saved in the localStorage obj */
-    getWeather: function(url, id) {
+    getWeather: function(url, id = 0, htmlId) {
         // Get the weather forecast for the location
         fetch(url, {method: 'GET', headers: headers})
             .then(response => {return response.json();})
             .then(data => {
-                //console.log(data);
-                // Save weather data
-                searchHistoryObj.id.rawWeatherData = data.properties.periods;
-                return;
+                // If id = 0, don't save data
+                if (id) {
+                    // Save weather data
+                    searchHistoryObj.id.rawWeatherData = data.properties.periods;
+
+                    // TO DO - Update html weather dashboard
+                    //this.updateWeatherHtml('weather-dashboard', id);
+                    
+                } else {
+                    this.updateWeatherHtml(htmlId, 0, data.properties.periods[0])
+                }  
             })
         //  
+    },
+    // Pass the html section container, an id if this is from searchHistoryObj, and the weather data to add
+    updateWeatherHtml: function(htmlId, id = 0, weatherData) {
+        // Check if this is updated the weather dashboard or dev picks
+        if (htmlId === 'weather-dashboard') {
+
+            // TO DO - Update the html weather dashboard
+
+        } else {
+            const pickContainer = document.getElementById(htmlId);
+            const tempContainer = pickContainer.getElementsByClassName("temp");
+            const windContainer = pickContainer.getElementsByClassName("wind");
+            const iconContainer = pickContainer.getElementsByClassName("icon");
+            // Set the text that comes in with wind speed to uppercase
+            let windSpeed = weatherData.windSpeed;
+            windSpeed = windSpeed.toUpperCase();
+
+            // Add the html content
+            tempContainer[0].children[0].textContent = `${weatherData.temperature} ${weatherData.temperatureUnit}`;
+            windContainer[0].children[0].textContent = windSpeed;
+            iconContainer[0].children[0].setAttribute("src", weatherData.icon);
+        }
     }
 }
 
@@ -82,6 +113,7 @@ const globalFunc = {
 const youtubeSearchApi = 'https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q='
 const youtubeApiKey = 'AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ'
 // TODO: add search button to submit search criteria
+/*
 let ytSearchBtn = document.getElementById("")
 
 ytSearchBtn.addEventListener('click', function() {
@@ -99,7 +131,7 @@ ytSearchBtn.addEventListener('click', function() {
         const iFrame = document.getElementById("videoPlayer").setAttribute('src','https://www.youtube.com/embed/' + videoId)
     })
 })
-
+*/
 
 // *****Global Variables*****
 const geoapifyApiKey = '035e16b84ace4340b1c953b2f690fc7e';
@@ -131,24 +163,26 @@ const headers = new Headers({
     'Accept': 'application/geo+json',
     'User-Agent': '(https://josht-dev.github.io/trail-planner, toasterrage@gmail.com, class-project)'
 });
+// Hold the latitude/longitude for dev pick hike locations
+const devPicksObj = {
+    // Location lat/lon for dev pick locations
+    'dev-josh-pick': {lat: 39.4289, lon: -105.0682}
+}
 
 
+// *****Run Code Below at Load*****
 
-/* REMOVE LATER - Left for testing purposes of the localStorage code
-//searchHistoryObj['id2'] = {name: 'test2 name'};
-console.log(searchHistoryObj);
-*/
-
-// REMOVE LATER - Testing geocoding api
-//globalFunc.getLocation('carpenter peak trail colorado');
-//globalFunc.getLocation('513 americana rd, co');  
-
-// REMOVE LATER - Testing for national weather service api
-//globalFunc.getNWSPoints(38.8894, -77.0352);
-//globalFunc.getWeather('https://api.weather.gov/gridpoints/TOP/31,80/forecast');
+// Loop through the devPicksObj to set the current weather for each location
+for (let key in devPicksObj) {
+    // Get the html elements
+    //const weatherUrl = globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon);
+    //const weatherData = globalFunc.getWeather('https://api.weather.gov/gridpoints/BOU/58,47/forecast', 0, key);
+    globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon, 0, key);
+}
 
 
 // TO DO - Validate address information better
+// TO DO - Look into google advert/tracking 'bocked by client' console errors
 // TO DO - Check the response header for if the points address expired
 // TO DO - Add ability to view the hourly forecast from National Weather Service
 // TO DO - Set up autocomplete from geoapify address autocomplete API
