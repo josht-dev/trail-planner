@@ -11,6 +11,10 @@
     text-align: center;
 }
 
+.hidden {
+  display: none;
+}
+
 /* Autocomplete code was originally provided by the geoapify api tutorial at
     https://www.geoapify.com/tutorial/address-input-for-address-validation-and-address-verification-forms-tutorial*/
 .autocomplete-container {
