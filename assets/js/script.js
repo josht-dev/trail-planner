@@ -100,8 +100,8 @@ const globalFunc = {
                     }
                 })
                 .catch((error) => {
-                    // TO DO - Add a loading modal?
-                    console.log(error);
+                    // TO DO - Change console.log to modal
+                    //console.log(error);
                     if (retries < 3) {
                         retries++;
                         fetchWeather();
@@ -152,17 +152,32 @@ const globalFunc = {
             // Move to index 0
             devSlideIndex = 0;
             devPickSlides[devSlideIndex].classList.toggle('hidden');
-            //console.log(devSlideIndex);
         } else if (num < 0 && devSlideIndex === 0) {
             // Move to last index
             devSlideIndex = devPickSlides.length - 1;
             devPickSlides[devSlideIndex].classList.toggle('hidden');
-            //console.log(devSlideIndex);
         } else {
             // Proceed normally
             devSlideIndex = (num > 0) ? devSlideIndex + 1 : devSlideIndex - 1;
             devPickSlides[devSlideIndex].classList.toggle('hidden');
-            //console.log(devSlideIndex);
+        }
+    },
+    weatherCardBtn: function(num) {
+        futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        
+        // Wrap around to index 0 if at end of collection
+        if (num > 0 && futureWeatherIndex === futureWeatherCards.length - 1) {
+            // Move to index 0
+            futureWeatherIndex = 0;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        } else if (num < 0 && futureWeatherIndex === 0) {
+            // Move to last index
+            futureWeatherIndex = futureWeatherCards.length - 1;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        } else {
+            // Proceed normally
+            futureWeatherIndex = (num > 0) ? futureWeatherIndex + 1 : futureWeatherIndex - 1;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
         }
     }
 }
@@ -177,7 +192,7 @@ const ytSearchBtn = document.getElementById("ytSearchBtn")
 
 ytSearchBtn.addEventListener('click', function() {
     const searchCriteria = document.getElementById("searchCriteria").value
-// makes youtube search based on input from user in searchCriteria box / TODO: Set up sort of category filter to outdoors
+    // makes youtube search based on input from user in searchCriteria box / TODO: Set up sort of category filter to outdoors
     fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q=' + searchCriteria)
     .then(function (response){
         return response.json();
@@ -185,7 +200,6 @@ ytSearchBtn.addEventListener('click', function() {
         console.log(YTdata)
         // TODO: randomize video played out of first 5(?) results?
         let videoId = YTdata.items[0].id.videoId
-        console.log(videoId)
         // using yt search data, sets videoID to be played in youtube Player container
         const iFrame = document.getElementById("videoPlayer").setAttribute('src','https://www.youtube.com/embed/' + videoId)
     })
@@ -257,16 +271,18 @@ btnLocSearch.addEventListener('click', function (event) {
         }
     }
 })
-// Track dev pick side index
+// Track some indexes for dev pick slides and future weather cards
 let devSlideIndex = 0;
+let futureWeatherIndex = 0;
 // Hold the dev pick slides in a live html collection
 const devPickSlides = document.getElementsByClassName("dev-pick-container");
+// Hold the future weather cards in a live html collection
+const futureWeatherCards = document.getElementsByClassName("future-weather");
 
 // *****Autocomplete Address Code*****
 /* Autocomplete code was originally provided by the geoapify api tutorial at
     https://www.geoapify.com/tutorial/address-input-for-address-validation-and-address-verification-forms-tutorial*/
 function addressAutocomplete(containerElement, callback, options) {
-
     const MIN_ADDRESS_LENGTH = 3;
     const DEBOUNCE_DELAY = 300;
 
@@ -298,10 +314,8 @@ function addressAutocomplete(containerElement, callback, options) {
 
     /* We will call the API with a timeout to prevent unneccessary API activity.*/
     let currentTimeout;
-
     /* Save the current request promise reject function. To be able to cancel the promise when a new request comes */
     let currentPromiseReject;
-
     /* Focused item in the autocomplete list. This variable is used to navigate with buttons */
     let focusedItemIndex;
 
@@ -311,7 +325,6 @@ function addressAutocomplete(containerElement, callback, options) {
 
         /* Close any already open dropdown list */
         closeDropDownList();
-
 
         // Cancel previous timeout
         if (currentTimeout) {
@@ -344,7 +357,6 @@ function addressAutocomplete(containerElement, callback, options) {
             /* Create a new promise and send geocoding request */
             const promise = new Promise((resolve, reject) => {
                 currentPromiseReject = reject;
-
                 var url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(currentValue)}&filter=countrycode:us&format=json&limit=5&apiKey=${geoapifyApiKey}`;
 
                 fetch(url)
@@ -385,7 +397,6 @@ function addressAutocomplete(containerElement, callback, options) {
                         closeDropDownList();
                     });
                 });
-
             }, (err) => {
                 if (!err.canceled) {
                     console.log(err);
@@ -478,7 +489,6 @@ function addressAutocomplete(containerElement, callback, options) {
         }
     });
 }
-
 addressAutocomplete(document.getElementById("autocomplete-container"), (data) => {
     /* Commented out tutorial code, left for future debugging
     console.log("Selected option: ");
@@ -489,19 +499,14 @@ addressAutocomplete(document.getElementById("autocomplete-container"), (data) =>
 });
 // *****END Autocomplete Address Code*****
 
-
 // *****Run Code Below at Load*****
-
 // Loop through the devPicksObj to set the current weather for each location
 for (let key in devPicksObj) {
     // Get the location weather and add to html
     globalFunc.getNWSPoints(devPicksObj[key].lat, devPicksObj[key].lon, 0, key);
 }
 
-
-// TO DO - Validate address information better
 // TO DO - Look into google advert/tracking 'blocked by client' console errors
-// TO DO - Check the response header for if the points address expired
+// TO DO - Check the response header for if the points forecast url expired
 // TO DO - Add ability to view the hourly forecast from National Weather Service
-// TO DO - Set up autocomplete from geoapify address autocomplete API
 // TO DO - Use bbox get location map from openstreetmaps API
