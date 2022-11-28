@@ -20,7 +20,7 @@
   <!-- Nav and trail search container -->
   <nav class="navbar bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand">Trail Planner</a>
+      <a class="navbar-brand ">Trail Planner</a>
       <form class="d-flex" role="search">
         <!-- Input removed to use goeapify api autocomplete code
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -36,7 +36,7 @@
   <!-- Weather Dashboard container -->
   <div id="weather-dashboard" class="container">
     <section id="header" class="row">
-      <div class="card col">
+      <div class="card col card1">
         <div class="card-body">
           <h5 class="card-title" id="searchLocationName"></h5>
           <img src="" alt="" id="quickWeatherImage">
@@ -44,34 +44,34 @@
       </div>
       <div class="card col">
         <div class="card-body">
-          <h5 class="card-title">Current Weather</h5>
-          <p class="card-text" id="currentWeatherTemp">Current Temp(F): </p>
-          <p class="card-text" id="currentWind">Current Wind:</p>
+          <h5 class="card-title Weather2">Current Weather</h5>
+          <p class="card-text Weather2" id="currentWeatherTemp">Current Temp(F): </p>
+          <p class="card-text Weather2" id="currentWind">Current Wind:</p>
         </div>
       </div>
       <!-- Weather 1 day out -->
-      <div class="card col">
+      <div class="card col card1">
         <div class="future-weather">
           <div class="card-body">
-            <h5 class="card-title">Tomorrow</h5>
-            <p class="card-text" id="temp">Temp(F): </p>
-            <p class="card-text" id="wind">Wind: </p>
+            <h5 class="card-title Weather2">Tomorrow</h5>
+            <p class="card-text Weather2" id="temp">Temp(F): </p>
+            <p class="card-text Weather2" id="wind">Wind: </p>
           </div>
         </div>
         <!-- Weather 2 days out -->
         <div class="future-weather hidden">
           <div class="card-body">
-            <h5 class="card-title">The Day After</h5>
-            <p class="card-text" id="temp">Temp(F): </p>
-            <p class="card-text" id="wind"></p>
+            <h5 class="card-title Weather2">The Day After</h5>
+            <p class="card-text Weather2" id="temp">Temp(F): </p>
+            <p class="card-text Weather2" id="wind"></p>
           </div>
         </div>
         <!-- Weather 3 days out -->
         <div class="future-weather hidden">
           <div class="card-body">
-            <h5 class="card-title">The Day After That</h5>
-            <p class="card-text" id="temp">Temp(F): </p>
-            <p class="card-text" id="wind"></p>
+            <h5 class="card-title Weather2">The Day After That</h5>
+            <p class="card-text Weather2" id="temp">Temp(F): </p>
+            <p class="card-text Weather2" id="wind"></p>
           </div>
         </div>
         <a class="prev-card" onclick="globalFunc.weatherCardBtn(-1)">&#10094;</a>
@@ -97,7 +97,7 @@
       <!-- Dev Hiking Pick container -->
       <section class="dev-pick-container col-sm-6">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body DevPick1">
             <!-- Dev (Josh) Pick data -->
             <section id="dev-josh-pick" class="devname" style="height: 600px">
               <!-- Top row of dev pick container content -->
@@ -166,7 +166,7 @@
       </section>
       <!-- Dev Hiking Pick container -->
       <section class="dev-pick-container col-sm-6 hidden">
-        <div class="card">
+        <div class="card DevPick1">
           <div class="card-body">
             <!-- Dev (Dylan) Pick data -->
             <section id="dev-dylan-pick" class="devname" style="height: 600px">
@@ -236,7 +236,7 @@
       </section>
       <!-- Dev Hiking Pick container -->
       <section class="dev-pick-container col-sm-6 hidden">
-        <div class="card">
+        <div class="card DevPick1">
           <div class="card-body">
             <!-- Dev (Christian) Pick data -->
             <section id="dev-christian-pick" class="devname" style="height: 600px">
