@@ -92,7 +92,6 @@ const globalFunc = {
                         // Save the new data to localStorage
                         this.saveLocal();
 
-                        // TODO: - Update html weather dashboard
                         this.updateWeatherHtml('weather-dashboard', id);
 
                     } else {
@@ -115,8 +114,6 @@ const globalFunc = {
     updateWeatherHtml: function (htmlId, id = 0, weatherData) {
         // Check if this is updated the weather dashboard or dev picks
         if (htmlId === 'weather-dashboard') {
-
-            // TODO: - Update the html weather dashboard
             // Location Posting
             const searchLocationNameEl = document.getElementById("searchLocationName")
             let searchLocationName = searchHistoryObj[id].name
