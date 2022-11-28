@@ -123,11 +123,19 @@ const globalFunc = {
             console.log(searchLocationName)
             const locationNameArray = searchLocationName.split(", ")
             console.log(locationNameArray)
-            searchLocationNameEl.textContent = locationNameArray[0]
+            searchLocationNameEl.textContent = locationNameArray[1] + " " + locationNameArray[2]
+            // Quick Weather Image
+            let weatherImageSrc = searchHistoryObj[id].rawWeatherData[0].icon;
+            const weatherImageEl = document.getElementById("quickWeatherImage")
+            weatherImageEl.setAttribute("src", weatherImageSrc)
             // Temp Reading
             const currentWeatherTempEl = document.getElementById("currentWeatherTemp")
             let currentTempReading = searchHistoryObj[id].rawWeatherData[0].temperature
             currentWeatherTempEl.textContent = " Current Temp(F): " + currentTempReading
+            // Wind Reading
+            const currentWindEl = document.getElementById("currentWind")
+            let currentWindReading = searchHistoryObj[id].rawWeatherData[0].windSpeed + " " + searchHistoryObj[id].rawWeatherData[0].windDirection
+            currentWindEl.textContent = "Current Wind: " + currentWindReading
 
         } else {
             const pickContainer = document.getElementById(htmlId);
