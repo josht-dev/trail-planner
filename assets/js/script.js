@@ -92,8 +92,8 @@ const globalFunc = {
                         // Save the new data to localStorage
                         this.saveLocal();
 
-                        // TO DO - Update html weather dashboard
-                        //this.updateWeatherHtml('weather-dashboard', id);
+                        // TODO: - Update html weather dashboard
+                        this.updateWeatherHtml('weather-dashboard', id);
 
                     } else {
                         this.updateWeatherHtml(htmlId, 0, data.properties.periods[0])
@@ -116,7 +116,18 @@ const globalFunc = {
         // Check if this is updated the weather dashboard or dev picks
         if (htmlId === 'weather-dashboard') {
 
-            // TO DO - Update the html weather dashboard
+            // TODO: - Update the html weather dashboard
+            // Location Posting
+            const searchLocationNameEl = document.getElementById("searchLocationName")
+            let searchLocationName = searchHistoryObj[id].name
+            console.log(searchLocationName)
+            const locationNameArray = searchLocationName.split(", ")
+            console.log(locationNameArray)
+            searchLocationNameEl.textContent = locationNameArray[0]
+            // Temp Reading
+            const currentWeatherTempEl = document.getElementById("currentWeatherTemp")
+            let currentTempReading = searchHistoryObj[id].rawWeatherData[0].temperature
+            currentWeatherTempEl.textContent = " Current Temp(F): " + currentTempReading
 
         } else {
             const pickContainer = document.getElementById(htmlId);
