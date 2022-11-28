@@ -120,9 +120,7 @@ const globalFunc = {
             // Location Posting
             const searchLocationNameEl = document.getElementById("searchLocationName")
             let searchLocationName = searchHistoryObj[id].name
-            console.log(searchLocationName)
             const locationNameArray = searchLocationName.split(", ")
-            console.log(locationNameArray)
             searchLocationNameEl.textContent = locationNameArray[1] + " " + locationNameArray[2]
             // Quick Weather Image
             let weatherImageSrc = searchHistoryObj[id].rawWeatherData[0].icon;
@@ -136,6 +134,21 @@ const globalFunc = {
             const currentWindEl = document.getElementById("currentWind")
             let currentWindReading = searchHistoryObj[id].rawWeatherData[0].windSpeed + " " + searchHistoryObj[id].rawWeatherData[0].windDirection
             currentWindEl.textContent = "Current Wind: " + currentWindReading
+
+            // future weather cards
+            let calcIndex = []
+            if (searchHistoryObj[id].rawWeatherData[0].name === "Tonight") {
+                calcIndex.push(1, 3, 5)
+            } else {
+                calcIndex.push(2, 4, 6)
+            }
+            for (let index = 0; index < 3; index++) {
+                let futureTemp = searchHistoryObj[id].rawWeatherData[calcIndex[index]].temperature
+                futureWeatherCards[index].firstElementChild.children[1].textContent = "Temp(F): " + futureTemp;
+
+                let futureWind = searchHistoryObj[id].rawWeatherData[calcIndex[index]].windSpeed + " " + searchHistoryObj[id].rawWeatherData[calcIndex[index]].windDirection
+                futureWeatherCards[index].firstElementChild.children[2].textContent = "Wind: " + futureWind;
+            }
 
         } else {
             const pickContainer = document.getElementById(htmlId);
@@ -152,9 +165,9 @@ const globalFunc = {
             iconContainer[0].children[0].setAttribute("src", weatherData.icon);
         }
     },
-    devSlideBtn: function(num) {
+    devSlideBtn: function (num) {
         devPickSlides[devSlideIndex].classList.toggle('hidden');
-        
+
         // Wrap around to index 0 if at end of collection
         if (num > 0 && devSlideIndex === devPickSlides.length - 1) {
             // Move to index 0
@@ -170,9 +183,9 @@ const globalFunc = {
             devPickSlides[devSlideIndex].classList.toggle('hidden');
         }
     },
-    weatherCardBtn: function(num) {
+    weatherCardBtn: function (num) {
         futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
-        
+
         // Wrap around to index 0 if at end of collection
         if (num > 0 && futureWeatherIndex === futureWeatherCards.length - 1) {
             // Move to index 0
@@ -198,19 +211,19 @@ const youtubeApiKey = 'AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ'
 
 const ytSearchBtn = document.getElementById("ytSearchBtn")
 
-ytSearchBtn.addEventListener('click', function() {
+ytSearchBtn.addEventListener('click', function () {
     const searchCriteria = document.getElementById("searchCriteria").value
     // makes youtube search based on input from user in searchCriteria box / TODO: Set up sort of category filter to outdoors
     fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q=' + searchCriteria)
-    .then(function (response){
-        return response.json();
-    }).then(function(YTdata){
-        console.log(YTdata)
-        // TODO: randomize video played out of first 5(?) results?
-        let videoId = YTdata.items[0].id.videoId
-        // using yt search data, sets videoID to be played in youtube Player container
-        const iFrame = document.getElementById("videoPlayer").setAttribute('src','https://www.youtube.com/embed/' + videoId)
-    })
+        .then(function (response) {
+            return response.json();
+        }).then(function (YTdata) {
+            console.log(YTdata)
+            // TODO: randomize video played out of first 5(?) results?
+            let videoId = YTdata.items[0].id.videoId
+            // using yt search data, sets videoID to be played in youtube Player container
+            const iFrame = document.getElementById("videoPlayer").setAttribute('src', 'https://www.youtube.com/embed/' + videoId)
+        })
 })
 
 // *****Global Variables*****
@@ -255,7 +268,7 @@ const btnLocSearch = document.getElementById("loc-search");
 btnLocSearch.addEventListener('click', function (event) {
     event.preventDefault();
     let searchVal = this.previousElementSibling.firstElementChild.firstElementChild.value;
-    
+
     // Validate search input was not blank
     if (searchVal) {
         let saved = false;
