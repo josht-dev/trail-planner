@@ -132,6 +132,27 @@ const globalFunc = {
             windContainer[0].children[0].textContent = windSpeed;
             iconContainer[0].children[0].setAttribute("src", weatherData.icon);
         }
+    },
+    devSlideBtn: function(num) {
+        devPickSlides[devSlideIndex].classList.toggle('hidden');
+        
+        // Wrap around to index 0 if at end of collection
+        if (num > 0 && devSlideIndex === devPickSlides.length - 1) {
+            // Move to index 0
+            devSlideIndex = 0;
+            devPickSlides[devSlideIndex].classList.toggle('hidden');
+            //console.log(devSlideIndex);
+        } else if (num < 0 && devSlideIndex === 0) {
+            // Move to last index
+            devSlideIndex = devPickSlides.length - 1;
+            devPickSlides[devSlideIndex].classList.toggle('hidden');
+            //console.log(devSlideIndex);
+        } else {
+            // Proceed normally
+            devSlideIndex = (num > 0) ? devSlideIndex + 1 : devSlideIndex - 1;
+            devPickSlides[devSlideIndex].classList.toggle('hidden');
+            //console.log(devSlideIndex);
+        }
     }
 }
 
@@ -224,6 +245,10 @@ btnLocSearch.addEventListener('click', function (event) {
         }
     }
 })
+// Track dev pick side index
+let devSlideIndex = 0;
+// Hold the dev pick slides in a live html collection
+const devPickSlides = document.getElementsByClassName("dev-pick-container");
 
 // *****Autocomplete Address Code*****
 /* Autocomplete code was originally provided by the geoapify api tutorial at

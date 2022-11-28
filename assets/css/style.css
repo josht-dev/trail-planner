@@ -21,7 +21,7 @@
   cursor: pointer;
   position: absolute;
   top: 50%;
-  width: 100%;
+  
   padding: 16px;
   color: #000;
   font-weight: bold;
@@ -31,8 +31,12 @@
   user-select: none;
 }
 
+.prev {
+ right: 90%;
+}
+
 .next {
-  text-align: end;
+  left: 90%;
 }
 
 /* Autocomplete code was originally provided by the geoapify api tutorial at
