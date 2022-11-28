@@ -1,6 +1,42 @@
 * {
     font-family: 'Times New Roman', Times, serif;
 }
+:root{
+  --Standard:#000000;
+  --Secondary:#FFFFFF;
+  --Primary-Bground:#B0FFBE;
+  --Card-Bground1:#919191;
+  --Hiking-Bground:#66d4ffe0;
+  --Packing-Bground:#FFCB7F;
+  --Text-1:#000000;
+  --Text-2:#FFFFFF;
+  --Text-3:#532f00d0;
+}
+
+.main-body {
+  background-color: var(--Primary-Bground);
+  background-image: url("../images/Background1.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.Hiking1 {
+  background-color: var(--Hiking-Bground);
+}
+
+.Hiking2 {
+  color:var(--Standard);
+  font-weight: bold;
+}
+
+.Packing1{
+ background-color: var(--Packing-Bground);
+}
+
+.Packing2{
+  color: var(--Standard);
+  font-weight: bold;
+}
 
 .card{
     margin: 20px;
@@ -23,7 +59,7 @@
   top: 50%;
   
   padding: 16px;
-  color: #000;
+  color: var(--Standard);
   font-weight: bold;
   font-size: 18px;
   transition: 0.6s ease;
