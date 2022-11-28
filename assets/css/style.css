@@ -5,10 +5,11 @@
   --Standard:#000000;
   --Secondary:#FFFFFF;
   --Primary-Bground:#B0FFBE;
-  --Card-Bground1:#919191;
+  --Card-Bground1:#cac4c4;
   --Hiking-Bground:#66d4ffe0;
   --Packing-Bground:#FFCB7F;
   --Youtube-Bground:#830a0ae5;
+  --Dev-Bground:#0c3691;
   --Text-1:#000000;
   --Text-2:#FFFFFF;
   --Text-3:#532f00d0;
@@ -20,6 +21,19 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+
+.card1{
+  background-color: var(--Card-Bground1);
+  background-image: url("../images/IMG5.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.Weather2{
+  color: var(--Standard);
+  font-weight: bold;
+}
+
 .Youtube1{
   background-color: var(--Youtube-Bground);
   background-image:url("../images/IMG_0001.jpg");
@@ -29,6 +43,13 @@
   color: var(--Text-2);
   font-size:22px;
   font-weight: bold;
+}
+
+.DevPick1 {
+  background-color: var(--Dev-Bground);
+  background-image: url("../images/IMG4.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
 .Hiking1 {
