@@ -11,6 +11,34 @@
     text-align: center;
 }
 
+/* Dev pick section carousel styling */
+.hidden {
+  display: none;
+}
+
+/* Next and Prev btn's */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  
+  padding: 16px;
+  color: #000;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  text-decoration: none;
+  user-select: none;
+}
+
+.prev {
+ right: 90%;
+}
+
+.next {
+  left: 90%;
+}
+
 /* Autocomplete code was originally provided by the geoapify api tutorial at
     https://www.geoapify.com/tutorial/address-input-for-address-validation-and-address-verification-forms-tutorial*/
 .autocomplete-container {
