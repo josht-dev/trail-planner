@@ -38,6 +38,13 @@
   background-size: 100% 100%;
 }
 
+.guideline-link {
+  color: #000000;
+}
+.guideline-link:hover {
+  color: blue;
+}
+
 .Hiking2 {
   color:var(--Text-1);
   font-weight: bold;
