@@ -193,11 +193,9 @@
 .clear-button {
   color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
-
   position: absolute;
   right: 7px;
   top: 0;
-
   height: 100%;
   display: none;
   align-items: center;
@@ -214,7 +212,6 @@
 
 /* Media queries for smaller screen sizes */
 @media screen and (max-width: 1023px) {
-  
   .prev-card {
     right: 85%;
   }
@@ -229,5 +226,4 @@
   .next {
     left: 90%;
   }
-
 }
