@@ -210,7 +210,8 @@ const headers = new Headers({
 const devPicksObj = {
     // Location lat/lon for dev pick locations
     'dev-josh-pick': { lat: 39.4289, lon: -105.0682 },
-    'dev-dylan-pick': {lat: 38.5607, lon: -109.5764 }
+    'dev-dylan-pick': { lat: 38.5607, lon: -109.5764 },
+    'dev-christian-pick': { lat: 46.6568, lon: -92.3711 }
 }
 // Location search input/button
 const btnLocSearch = document.getElementById("loc-search");
