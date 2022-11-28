@@ -72,6 +72,18 @@
  left: 90%; 
 }
 
+/* Dev pick section */
+.cust-m-p {
+  margin: 0;
+  padding: 0;
+}
+
+.yt-sm-card {
+  min-width: fit-content;
+  min-height: fit-content;
+  max-width: fit-content;
+}
+
 /* Dev pick section carousel styling */
 .hidden {
   display: none;
