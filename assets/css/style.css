@@ -8,6 +8,7 @@
   --Card-Bground1:#919191;
   --Hiking-Bground:#66d4ffe0;
   --Packing-Bground:#FFCB7F;
+  --Youtube-Bground:#830a0ae5;
   --Text-1:#000000;
   --Text-2:#FFFFFF;
   --Text-3:#532f00d0;
@@ -19,22 +20,38 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+.Youtube1{
+  background-color: var(--Youtube-Bground);
+  background-image:url("../images/IMG_0001.jpg");
+}
+
+.Youtube2{
+  color: var(--Text-2);
+  font-size:22px;
+  font-weight: bold;
+}
 
 .Hiking1 {
   background-color: var(--Hiking-Bground);
+  background-image: url("../images/IMG2.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
 .Hiking2 {
-  color:var(--Standard);
+  color:var(--Text-1);
   font-weight: bold;
 }
 
 .Packing1{
  background-color: var(--Packing-Bground);
+ background-image: url("../images/IMG3.jpg");
+ background-repeat: no-repeat;
+ background-size: 100% 100%;
 }
 
 .Packing2{
-  color: var(--Standard);
+  color: var(--Text-2);
   font-weight: bold;
 }
 
