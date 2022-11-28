@@ -10,6 +10,29 @@
   text-align: center;
 }
 
+/* Future weather card carousel styling */
+.prev-card, .next-card {
+  cursor: pointer;
+  position: absolute;
+  top: 30%;
+  width: fit-content;
+  padding: 16px;
+  color: #000;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  text-decoration: none;
+  user-select: none;
+}
+
+.prev-card {
+  right: 95%;
+}
+
+.next-card {
+ left: 95%; 
+}
+
 /* Dev pick section carousel styling */
 .hidden {
   display: none;

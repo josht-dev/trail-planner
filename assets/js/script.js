@@ -150,6 +150,24 @@ const globalFunc = {
             devSlideIndex = (num > 0) ? devSlideIndex + 1 : devSlideIndex - 1;
             devPickSlides[devSlideIndex].classList.toggle('hidden');
         }
+    },
+    weatherCardBtn: function(num) {
+        futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        
+        // Wrap around to index 0 if at end of collection
+        if (num > 0 && futureWeatherIndex === futureWeatherCards.length - 1) {
+            // Move to index 0
+            futureWeatherIndex = 0;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        } else if (num < 0 && futureWeatherIndex === 0) {
+            // Move to last index
+            futureWeatherIndex = futureWeatherCards.length - 1;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        } else {
+            // Proceed normally
+            futureWeatherIndex = (num > 0) ? futureWeatherIndex + 1 : futureWeatherIndex - 1;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        }
     }
 }
 
@@ -242,10 +260,13 @@ btnLocSearch.addEventListener('click', function (event) {
         }
     }
 })
-// Track dev pick side index
+// Track some indexes for dev pick slides and future weather cards
 let devSlideIndex = 0;
+let futureWeatherIndex = 0;
 // Hold the dev pick slides in a live html collection
 const devPickSlides = document.getElementsByClassName("dev-pick-container");
+// Hold the future weather cards in a live html collection
+const futureWeatherCards = document.getElementsByClassName("future-weather");
 
 // *****Autocomplete Address Code*****
 /* Autocomplete code was originally provided by the geoapify api tutorial at
