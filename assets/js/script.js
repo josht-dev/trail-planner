@@ -142,7 +142,6 @@ const globalFunc = {
             for (let index = 0; index < 3; index++) {
                 let futureTemp = searchHistoryObj[id].rawWeatherData[calcIndex[index]].temperature
                 futureWeatherCards[index].firstElementChild.children[1].textContent = "Temp(F): " + futureTemp;
-
                 let futureWind = searchHistoryObj[id].rawWeatherData[calcIndex[index]].windSpeed + " " + searchHistoryObj[id].rawWeatherData[calcIndex[index]].windDirection
                 futureWeatherCards[index].firstElementChild.children[2].textContent = "Wind: " + futureWind;
             }
@@ -202,10 +201,8 @@ const globalFunc = {
 
 // ***** Youtube Search and video section *****
 // TODO: Investigate potential cookie issue: // some internal error occurs shortly after video begins playing https://issuetracker.google.com/issues/229013699
-
 const youtubeSearchApi = 'https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q='
 const youtubeApiKey = 'AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ'
-
 const ytSearchBtn = document.getElementById("ytSearchBtn")
 
 ytSearchBtn.addEventListener('click', function () {
@@ -215,7 +212,6 @@ ytSearchBtn.addEventListener('click', function () {
         .then(function (response) {
             return response.json();
         }).then(function (YTdata) {
-            console.log(YTdata)
             // TODO: randomize video played out of first 5(?) results?
             let videoId = YTdata.items[0].id.videoId
             // using yt search data, sets videoID to be played in youtube Player container
@@ -255,7 +251,6 @@ const headers = new Headers({
 });
 // Hold the latitude/longitude for dev pick hike locations
 const devPicksObj = {
-    // Location lat/lon for dev pick locations
     'dev-josh-pick': { lat: 39.4289, lon: -105.0682 },
     'dev-dylan-pick': { lat: 38.5607, lon: -109.5764 },
     'dev-christian-pick': { lat: 46.6568, lon: -92.3711 }
