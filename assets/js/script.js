@@ -92,8 +92,7 @@ const globalFunc = {
                         // Save the new data to localStorage
                         this.saveLocal();
 
-                        // TO DO - Update html weather dashboard
-                        //this.updateWeatherHtml('weather-dashboard', id);
+                        this.updateWeatherHtml('weather-dashboard', id);
 
                     } else {
                         this.updateWeatherHtml(htmlId, 0, data.properties.periods[0])
@@ -115,8 +114,37 @@ const globalFunc = {
     updateWeatherHtml: function (htmlId, id = 0, weatherData) {
         // Check if this is updated the weather dashboard or dev picks
         if (htmlId === 'weather-dashboard') {
+            // Location Posting
+            const searchLocationNameEl = document.getElementById("searchLocationName")
+            let searchLocationName = searchHistoryObj[id].name
+            const locationNameArray = searchLocationName.split(", ")
+            searchLocationNameEl.textContent = locationNameArray[1] + " " + locationNameArray[2]
+            // Quick Weather Image
+            let weatherImageSrc = searchHistoryObj[id].rawWeatherData[0].icon;
+            const weatherImageEl = document.getElementById("quickWeatherImage")
+            weatherImageEl.setAttribute("src", weatherImageSrc)
+            // Temp Reading
+            const currentWeatherTempEl = document.getElementById("currentWeatherTemp")
+            let currentTempReading = searchHistoryObj[id].rawWeatherData[0].temperature
+            currentWeatherTempEl.textContent = " Current Temp(F): " + currentTempReading
+            // Wind Reading
+            const currentWindEl = document.getElementById("currentWind")
+            let currentWindReading = searchHistoryObj[id].rawWeatherData[0].windSpeed + " " + searchHistoryObj[id].rawWeatherData[0].windDirection
+            currentWindEl.textContent = "Current Wind: " + currentWindReading
 
-            // TO DO - Update the html weather dashboard
+            // future weather cards
+            let calcIndex = []
+            if (searchHistoryObj[id].rawWeatherData[0].name === "Tonight") {
+                calcIndex.push(1, 3, 5)
+            } else {
+                calcIndex.push(2, 4, 6)
+            }
+            for (let index = 0; index < 3; index++) {
+                let futureTemp = searchHistoryObj[id].rawWeatherData[calcIndex[index]].temperature
+                futureWeatherCards[index].firstElementChild.children[1].textContent = "Temp(F): " + futureTemp;
+                let futureWind = searchHistoryObj[id].rawWeatherData[calcIndex[index]].windSpeed + " " + searchHistoryObj[id].rawWeatherData[calcIndex[index]].windDirection
+                futureWeatherCards[index].firstElementChild.children[2].textContent = "Wind: " + futureWind;
+            }
 
         } else {
             const pickContainer = document.getElementById(htmlId);
@@ -133,9 +161,9 @@ const globalFunc = {
             iconContainer[0].children[0].setAttribute("src", weatherData.icon);
         }
     },
-    devSlideBtn: function(num) {
+    devSlideBtn: function (num) {
         devPickSlides[devSlideIndex].classList.toggle('hidden');
-        
+
         // Wrap around to index 0 if at end of collection
         if (num > 0 && devSlideIndex === devPickSlides.length - 1) {
             // Move to index 0
@@ -150,30 +178,45 @@ const globalFunc = {
             devSlideIndex = (num > 0) ? devSlideIndex + 1 : devSlideIndex - 1;
             devPickSlides[devSlideIndex].classList.toggle('hidden');
         }
+    },
+    weatherCardBtn: function (num) {
+        futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+
+        // Wrap around to index 0 if at end of collection
+        if (num > 0 && futureWeatherIndex === futureWeatherCards.length - 1) {
+            // Move to index 0
+            futureWeatherIndex = 0;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        } else if (num < 0 && futureWeatherIndex === 0) {
+            // Move to last index
+            futureWeatherIndex = futureWeatherCards.length - 1;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        } else {
+            // Proceed normally
+            futureWeatherIndex = (num > 0) ? futureWeatherIndex + 1 : futureWeatherIndex - 1;
+            futureWeatherCards[futureWeatherIndex].classList.toggle('hidden');
+        }
     }
 }
 
 // ***** Youtube Search and video section *****
 // TODO: Investigate potential cookie issue: // some internal error occurs shortly after video begins playing https://issuetracker.google.com/issues/229013699
-
 const youtubeSearchApi = 'https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q='
 const youtubeApiKey = 'AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ'
-
 const ytSearchBtn = document.getElementById("ytSearchBtn")
 
-ytSearchBtn.addEventListener('click', function() {
+ytSearchBtn.addEventListener('click', function () {
     const searchCriteria = document.getElementById("searchCriteria").value
     // makes youtube search based on input from user in searchCriteria box / TODO: Set up sort of category filter to outdoors
     fetch('https://www.googleapis.com/youtube/v3/search?&key=AIzaSyBjhy93wQO68VuHasrO7AfQdIaRb2CVfWQ&type=video&q=' + searchCriteria)
-    .then(function (response){
-        return response.json();
-    }).then(function(YTdata){
-        console.log(YTdata)
-        // TODO: randomize video played out of first 5(?) results?
-        let videoId = YTdata.items[0].id.videoId
-        // using yt search data, sets videoID to be played in youtube Player container
-        const iFrame = document.getElementById("videoPlayer").setAttribute('src','https://www.youtube.com/embed/' + videoId)
-    })
+        .then(function (response) {
+            return response.json();
+        }).then(function (YTdata) {
+            // TODO: randomize video played out of first 5(?) results?
+            let videoId = YTdata.items[0].id.videoId
+            // using yt search data, sets videoID to be played in youtube Player container
+            const iFrame = document.getElementById("videoPlayer").setAttribute('src', 'https://www.youtube.com/embed/' + videoId)
+        })
 })
 
 // *****Global Variables*****
@@ -208,16 +251,17 @@ const headers = new Headers({
 });
 // Hold the latitude/longitude for dev pick hike locations
 const devPicksObj = {
-    // Location lat/lon for dev pick locations
     'dev-josh-pick': { lat: 39.4289, lon: -105.0682 },
-    'dev-dylan-pick': {lat: 38.5607, lon: -109.5764 }
+    'dev-dylan-pick': { lat: 38.5607, lon: -109.5764 },
+    'dev-christian-pick': { lat: 46.6568, lon: -92.3711 },
+    'dev-ethyn-pick': { lat: 37.6213, lon: -105.5568 }
 }
 // Location search input/button
 const btnLocSearch = document.getElementById("loc-search");
 btnLocSearch.addEventListener('click', function (event) {
     event.preventDefault();
     let searchVal = this.previousElementSibling.firstElementChild.firstElementChild.value;
-    
+
     // Validate search input was not blank
     if (searchVal) {
         let saved = false;
@@ -241,10 +285,13 @@ btnLocSearch.addEventListener('click', function (event) {
         }
     }
 })
-// Track dev pick side index
+// Track some indexes for dev pick slides and future weather cards
 let devSlideIndex = 0;
+let futureWeatherIndex = 0;
 // Hold the dev pick slides in a live html collection
 const devPickSlides = document.getElementsByClassName("dev-pick-container");
+// Hold the future weather cards in a live html collection
+const futureWeatherCards = document.getElementsByClassName("future-weather");
 
 // *****Autocomplete Address Code*****
 /* Autocomplete code was originally provided by the geoapify api tutorial at

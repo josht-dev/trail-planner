@@ -1,6 +1,89 @@
 * {
   font-family: 'Times New Roman', Times, serif;
 }
+:root{
+  --Standard:#000000;
+  --Secondary:#FFFFFF;
+  --Primary-Bground:#B0FFBE;
+  --Card-Bground1:#cac4c4;
+  --Hiking-Bground:#66d4ffe0;
+  --Packing-Bground:#FFCB7F;
+  --Youtube-Bground:#830a0ae5;
+  --Dev-Bground:#0c3691;
+  --Text-1:#000000;
+  --Text-2:#FFFFFF;
+  --Text-3:#532f00d0;
+}
+
+.main-body {
+  background-color: var(--Primary-Bground);
+  background-image: url("../images/Background1.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.card1{
+  background-color: var(--Card-Bground1);
+  background-image: url("../images/IMG5.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+
+
+.Weather2{
+  color: var(--Standard);
+  font-weight: bold;
+}
+
+.Youtube1{
+  background-color: var(--Youtube-Bground);
+  background-image:url("../images/IMG_0001.jpg");
+}
+
+.Youtube2{
+  color: var(--Text-2);
+  font-size:22px;
+  font-weight: bold;
+}
+
+.DevPick1 {
+  background-color: var(--Dev-Bground);
+  background-image: url("../images/IMG4.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.Hiking1 {
+  background-color: var(--Hiking-Bground);
+  background-image: url("../images/IMG2.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.guideline-link {
+  color: #000000;
+}
+.guideline-link:hover {
+  color: blue;
+}
+
+.Hiking2 {
+  color:var(--Text-1);
+  font-weight: bold;
+}
+
+.Packing1{
+ background-color: var(--Packing-Bground);
+ background-image: url("../images/IMG3.jpg");
+ background-repeat: no-repeat;
+ background-size: 100% 100%;
+}
+
+.Packing2{
+  color: var(--Text-2);
+  font-weight: bold;
+}
 
 .card {
   margin: 20px;
@@ -8,6 +91,44 @@
 
 .card-title {
   text-align: center;
+}
+
+/* Future weather card carousel styling */
+.prev-card, .next-card, .prev, .next {
+  cursor: pointer;
+  position: absolute;
+  width: fit-content;
+  padding: 16px;
+  color: var(--Standard);
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  text-decoration: none;
+  user-select: none;
+}
+
+.prev-card, .next-card {
+  top: 30%;
+}
+
+.prev-card {
+  right: 90%;
+}
+
+.next-card {
+ left: 90%; 
+}
+
+/* Dev pick section */
+.cust-m-p {
+  margin: 0;
+  padding: 0;
+}
+
+.yt-sm-card {
+  min-width: fit-content;
+  min-height: fit-content;
+  max-width: fit-content;
 }
 
 /* Dev pick section carousel styling */
@@ -18,24 +139,15 @@
 /* Next and Prev btn's */
 .prev,
 .next {
-  cursor: pointer;
-  position: absolute;
   top: 50%;
-  padding: 16px;
-  color: #000;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  text-decoration: none;
-  user-select: none;
 }
 
 .prev {
-  right: 90%;
+  right: 93%;
 }
 
 .next {
-  left: 90%;
+  left: 93%;
 }
 
 /* Autocomplete code was originally provided by the geoapify api tutorial at
@@ -83,11 +195,9 @@
 .clear-button {
   color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
-
   position: absolute;
   right: 7px;
   top: 0;
-
   height: 100%;
   display: none;
   align-items: center;
@@ -101,3 +211,21 @@
   color: rgba(0, 0, 0, 0.6);
 }
 /* END Autocomplete code*/
+
+/* Media queries for smaller screen sizes */
+@media screen and (max-width: 1023px) {
+  .prev-card {
+    right: 85%;
+  }
+  
+  .next-card {
+   left: 85%; 
+  }
+  
+  .prev {
+    right: 90%;
+  }
+  .next {
+    left: 90%;
+  }
+}
