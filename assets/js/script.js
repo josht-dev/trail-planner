@@ -253,7 +253,8 @@ const headers = new Headers({
 const devPicksObj = {
     'dev-josh-pick': { lat: 39.4289, lon: -105.0682 },
     'dev-dylan-pick': { lat: 38.5607, lon: -109.5764 },
-    'dev-christian-pick': { lat: 46.6568, lon: -92.3711 }
+    'dev-christian-pick': { lat: 46.6568, lon: -92.3711 },
+    'dev-ethyn-pick': { lat: 37.6213, lon: -105.5568 }
 }
 // Location search input/button
 const btnLocSearch = document.getElementById("loc-search");
