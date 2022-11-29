@@ -9,7 +9,7 @@ The web application will allow users to search specific hiking locations using t
 
 Screen Shot 2022-11-28 at 7.56.13 PM.png
 
-![screenshot](./assets/images/Screen%20Shot%202022-11-28%20at%207.56.13%20PM.png)
+![screenshot](./assets/images/Screenshotproject.png)
 
 link: https://josht-dev.github.io/trail-planner/
 
